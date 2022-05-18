@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { CookieService } from "ngx-cookie-service";
 import { Router } from '@angular/router';
-import { User } from '../model/user'
-import { RoleType } from '../model/role-type';
+import { RoleType, LoggedUser } from '../model/model'
+import { GlobalConstants } from '../common/global-constants';
 
 @Injectable({
   providedIn: "root"
@@ -11,12 +11,11 @@ import { RoleType } from '../model/role-type';
 export class UsersService {
 
   authenticated = false;
-  host = "http://localhost:8080/api/v1/";
 
   constructor(private http: HttpClient, private cookies: CookieService, private router: Router) { }
 
   login(credentials: any, callback: any, errorf: any) {
-    return this.http.post<User>(this.host + "login", credentials).subscribe(
+    return this.http.post<LoggedUser>(GlobalConstants.apiURL + "login", credentials).subscribe(
       (response) => {
         if (response && response.sessionId) {
           this.authenticated = true;
@@ -34,7 +33,7 @@ export class UsersService {
 
   logout(callback: any, errorf: any) {
 
-    return this.http.post(this.host + "logout",{sessionId: this.getToken()}).subscribe(
+    return this.http.post(GlobalConstants.apiURL + "logout", { sessionId: this.getToken() }).subscribe(
       (response) => {
         if (response) {
           this.authenticated = false;
@@ -67,5 +66,14 @@ export class UsersService {
   }
   getToken() {
     return this.cookies.get("token");
+  }
+
+  handleError(error: any) {
+    console.log(JSON.stringify(error));
+    if (error instanceof HttpErrorResponse) {
+      confirm(error.error.message);
+    } else {
+      confirm("Unexpected error")
+    }
   }
 }

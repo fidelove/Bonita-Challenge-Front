@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UsersService } from "../users/users.service";
-import { Router } from '@angular/router';
-import { User } from '../model/user'
-import { RoleType } from '../model/role-type'
-import { HttpErrorResponse } from '@angular/common/http';
+import { UsersService } from "../services/users.service";
+import { LoggedUser } from '../model/model'
 
 @Component({
   selector: 'app-login',
@@ -18,25 +15,19 @@ export class LoginComponent implements OnInit {
     "userPassword": ""
   }
 
-  constructor(public userService: UsersService, private router: Router) { }
+  constructor(public userService: UsersService) { }
 
   ngOnInit(): void {
   }
 
   login() {
-    this.userService.login(this.credentials, (response: User) => {
+    this.userService.login(this.credentials, (response: LoggedUser) => {
       if (response){
         this.userService.navigateByRole(response.role);
       }
     },
       (error: any) => {
-
-        console.log(JSON.stringify(error));
-        if (error instanceof HttpErrorResponse) {
-          confirm(error.error.message);
-        } else {
-          confirm("Unexpected error")
-        }
+        this.userService.handleError(error);
       });
     return false;
   }

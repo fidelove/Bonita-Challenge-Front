@@ -1,11 +1,16 @@
-<html>
-
-<head>
-	<title>title</title>
-</head>
-
-<body>
-	It works!
-</body>
-
-</html>
+<div class="main-wrapper" fxLayout="row" fxLayoutAlign="center center">
+	<mat-nav-list>
+		<a mat-list-item class="admin-users-table" *ngFor="let item of items;" (click)="navigate(item)"
+			[disableRipple]="true">
+			<mat-icon matListAvatar>person</mat-icon>
+			<h3 matLine> {{item.userName}}</h3>
+			<p matLine>{{item.userEmail}}</p>
+			<button mat-icon-button (click)="onEdit($event, item)">
+				<mat-icon>edit</mat-icon>
+			</button>
+			<button mat-icon-button (click)="onDelete($event, item)">
+				<mat-icon>delete_outline</mat-icon>
+			</button>
+		</a>
+	</mat-nav-list>
+</div>

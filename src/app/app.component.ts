@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { UsersService } from './users/users.service';
+import { UsersService } from './services/users.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
