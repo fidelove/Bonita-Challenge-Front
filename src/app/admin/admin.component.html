@@ -1,5 +1,6 @@
 <div class="main-wrapper" fxLayout="row" fxLayoutAlign="center center">
 	<mat-nav-list>
+	<button mat-stroked-button color="primary" >Create new user</button>
 		<a mat-list-item class="admin-users-table" *ngFor="let item of items;" (click)="navigate(item)"
 			[disableRipple]="true">
 			<mat-icon matListAvatar>person</mat-icon>

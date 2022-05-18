@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from "../services/users.service";
 import { LoggedUser } from '../model/model'
+import { environment } from '../../environments/environment'
 
 @Component({
   selector: 'app-login',
@@ -9,7 +10,7 @@ import { LoggedUser } from '../model/model'
 })
 export class LoginComponent implements OnInit {
 
-  hide = true;
+  hidePassword = true;
   credentials = {
     "userName": "",
     "userPassword": ""
@@ -21,17 +22,19 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.userService.login(this.credentials, (response: LoggedUser) => {
-      if (response){
-        this.userService.navigateByRole(response.role);
-      }
-    },
-      (error: any) => {
+    this.userService.post<LoggedUser>(environment.loginUrl, this.credentials).subscribe(
+      (response) => {
+        if (response && response.sessionId) {
+          this.userService.authenticated = true;
+          this.userService.setToken(response.sessionId);
+          this.userService.navigateByRole(response.role);
+        } else {
+          this.userService.authenticated = false;
+          this.userService.setToken("");
+        }
+      },
+      (error) => {
         this.userService.handleError(error);
       });
-    return false;
   }
-
-
-
 }

@@ -10,25 +10,29 @@ import { CookieService } from "ngx-cookie-service";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    AdminComponent
+    AdminComponent,
+    ConfirmDialogComponent
   ],
-  imports: [BrowserModule,
+  imports: [
+    BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
     AngularMaterialModule,
     FlexLayoutModule,
-    ReactiveFormsModule],
-  providers: [CookieService],
+    ReactiveFormsModule
+  ],
+  providers: [CookieService, ConfirmDialogComponent],
   bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  entryComponents: [ConfirmDialogComponent]
 })
-export class AppModule {
 
-}
+export class AppModule {}

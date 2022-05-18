@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { UsersService } from './services/users.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from '../environments/environment'
 
 @Component({
   selector: "app-root",
@@ -21,17 +22,15 @@ export class AppComponent {
   }
 
   logout() {
-    this.user.logout((response:any) => {
-      this.router.navigateByUrl('/');
-    },
-      (error: any) => {
+    this.user.get<boolean>(environment.logoutUrl).subscribe(
+      (response) => {
         this.router.navigateByUrl('/');
-
-        if (error instanceof HttpErrorResponse) {
-          confirm(error.error.message);
-        } else {
-          confirm("Unexpected error")
-        }
-      });
+        this.user.authenticated = false;
+        this.user.setToken("");
+      },
+      (error => {
+        this.user.handleError(error);
+      })
+    );
   }
 }

@@ -1,9 +1,11 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { CookieService } from "ngx-cookie-service";
 import { Router } from '@angular/router';
-import { RoleType, LoggedUser } from '../model/model'
-import { GlobalConstants } from '../common/global-constants';
+import { RoleType } from '../model/model'
+import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
+import { DialogService } from './dialog.service'
 
 @Injectable({
   providedIn: "root"
@@ -12,40 +14,26 @@ export class UsersService {
 
   authenticated = false;
 
-  constructor(private http: HttpClient, private cookies: CookieService, private router: Router) { }
+  constructor(private http: HttpClient, private cookies: CookieService, private router: Router, private dialog: DialogService) { }
 
-  login(credentials: any, callback: any, errorf: any) {
-    return this.http.post<LoggedUser>(GlobalConstants.apiURL + "login", credentials).subscribe(
-      (response) => {
-        if (response && response.sessionId) {
-          this.authenticated = true;
-          this.setToken(response.sessionId);
-        } else {
-          this.authenticated = false;
-          this.setToken("");
-        }
-        callback(response);
-      },
-      (error) => {
-        errorf(error);
-      });
+  get<T>(url: string): Observable<T> {
+    const headers = { 'sessionId': this.getToken() };
+    return this.http.get<T>(environment.apiUrl + url, { headers });
   }
 
-  logout(callback: any, errorf: any) {
+  post<T>(url: string, content: any): Observable<T> {
+    const headers = { 'sessionId': this.getToken() };
+    return this.http.post<T>(environment.apiUrl + url, content, { headers });
+  }
 
-    return this.http.post(GlobalConstants.apiURL + "logout", { sessionId: this.getToken() }).subscribe(
-      (response) => {
-        if (response) {
-          this.authenticated = false;
-          this.setToken("");
-        }
-        callback(response);
-      },
-      (error) => {
-        this.authenticated = false;
-        this.setToken("");
-        errorf(error);
-      });
+  put<T>(url: string, content: any): Observable<T> {
+    const headers = { 'sessionId': this.getToken() };
+    return this.http.put<T>(environment.apiUrl + url, content, { headers });
+  }
+
+  delete<T>(url: string): Observable<T> {
+    const headers = { 'sessionId': this.getToken() };
+    return this.http.delete<T>(environment.apiUrl + url, { headers });
   }
 
   navigateByRole(role: RoleType) {
@@ -62,18 +50,18 @@ export class UsersService {
   }
 
   setToken(token: any) {
-    this.cookies.set("token", token);
+    this.cookies.set('token', token);
   }
   getToken() {
-    return this.cookies.get("token");
+    return this.cookies.get('token');
   }
 
   handleError(error: any) {
     console.log(JSON.stringify(error));
     if (error instanceof HttpErrorResponse) {
-      confirm(error.error.message);
+      this.dialog.openDialog('Error', error.error.message, 'Ok', false);
     } else {
-      confirm("Unexpected error")
+      this.dialog.openDialog('Error', 'Unexpected error', 'Ok', false);
     }
   }
 }
