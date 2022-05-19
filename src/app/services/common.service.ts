@@ -47,8 +47,10 @@ export class CommonService {
         this.router.navigateByUrl('/admin');
         break;
       case RoleType.CHEF:
+        this.router.navigateByUrl('/chef');
         break;
       case RoleType.USER:
+        this.router.navigateByUrl('/user');
         break;
     }
   }

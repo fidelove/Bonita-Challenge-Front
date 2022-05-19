@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserEditorComponent } from './user-editor.component';
+import { CommonUserComponent } from './commonuser.component';
 
-describe('UserEditorComponent', () => {
-  let component: UserEditorComponent;
-  let fixture: ComponentFixture<UserEditorComponent>;
+describe('CommonUserComponent', () => {
+  let component: CommonUserComponent;
+  let fixture: ComponentFixture<CommonUserComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserEditorComponent ]
+      declarations: [ CommonUserComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UserEditorComponent);
+    fixture = TestBed.createComponent(CommonUserComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit {
 
   hidePassword = true;
   credentials = {
-    'userName': '',
+    'name': '',
     'userPassword': ''
   }
 
