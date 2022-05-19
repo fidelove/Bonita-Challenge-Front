@@ -10,7 +10,7 @@ import { DialogService } from './dialog.service'
 @Injectable({
   providedIn: 'root'
 })
-export class UsersService {
+export class CommonService {
 
   authenticated = false;
 

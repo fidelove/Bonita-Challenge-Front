@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { UsersService } from '../services/users.service';
+import { CommonService } from '../services/common.service';
 import { User, RoleType } from '../model/model';
 import { DialogService } from '../services/dialog.service';
-import { environment } from '../../environments/environment'
+import { environment } from '../../environments/environment';
 
 @Component({
 	selector: 'app-admin',
@@ -14,7 +14,7 @@ export class AdminComponent implements OnInit {
 
 	// The listed users
 	items = []
-	constructor(private userService: UsersService, private dialog: DialogService) { }
+	constructor(private service: CommonService, private dialog: DialogService) { }
 
 	ngOnInit(): void {
 		this.updateUsers();
@@ -22,17 +22,17 @@ export class AdminComponent implements OnInit {
 
 	updateUsers() {
 		// Invoke all users resource
-		this.userService.get<Array<User>>(environment.allUsersUrl).subscribe(
+		this.service.get<Array<User>>(environment.allUsersUrl).subscribe(
 			(response) => {
 
 				// And update the listed users
 				this.items = response;
 				// If it has been a reload I check if the logout button is displayed
-				this.userService.authenticated = this.userService.getToken() != '';
+				this.service.authenticated = this.service.getToken() != '';
 			},
 			(error) => {
 				// Display error
-				this.userService.handleError(error);
+				this.service.handleError(error);
 			}
 		);
 	}
@@ -55,12 +55,12 @@ export class AdminComponent implements OnInit {
 			"Delete", true).subscribe(result => {
 				if (result) {
 					// Invoke the delete action
-					this.userService.delete<boolean>(environment.userUrl + "/" + item.id).subscribe(
-						(response) => {
+					this.service.delete<boolean>(environment.userUrl + "/" + item.id).subscribe(
+						() => {
 							this.updateUsers();
 						},
 						(error) => {
-							this.userService.handleError(error);
+							this.service.handleError(error);
 							this.updateUsers();
 						}
 					);
