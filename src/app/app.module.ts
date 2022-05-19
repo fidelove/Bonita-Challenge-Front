@@ -1,23 +1,25 @@
-import { AppRoutingModule } from "./app.routing";
-import { BrowserModule } from "@angular/platform-browser";
+import { AppRoutingModule } from './app.routing';
+import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { AppComponent } from "./app.component";
-import { LoginComponent } from "./login/login.component";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppComponent } from './app.component';
+import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component'
-import { HttpClientModule } from "@angular/common/http";
-import { CookieService } from "ngx-cookie-service";
+import { HttpClientModule } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { UserEditorComponent } from './user-editor/user-editor.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     AdminComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    UserEditorComponent
   ],
   imports: [
     BrowserModule,
@@ -29,10 +31,10 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     FlexLayoutModule,
     ReactiveFormsModule
   ],
-  providers: [CookieService, ConfirmDialogComponent],
+  providers: [CookieService, ConfirmDialogComponent, UserEditorComponent, AdminComponent],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents: [ConfirmDialogComponent]
+  entryComponents: [ConfirmDialogComponent, UserEditorComponent]
 })
 
 export class AppModule {}
