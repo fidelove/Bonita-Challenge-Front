@@ -20,12 +20,12 @@ import { CommonUserComponent } from './users/commonuser/commonuser.component';
   declarations: [
     AppComponent,
     LoginComponent,
-    AdminComponent,
-    ChefComponent,
-    UserComponent,
     ConfirmDialogComponent,
     DataEditorComponent,
-    CommonUserComponent
+    CommonUserComponent,
+    AdminComponent,
+    ChefComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +43,9 @@ import { CommonUserComponent } from './users/commonuser/commonuser.component';
     AdminComponent,
     ChefComponent,
     UserComponent,
-    CommonUserComponent],
+    CommonUserComponent,
+    LoginComponent
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   entryComponents: [ConfirmDialogComponent, DataEditorComponent]

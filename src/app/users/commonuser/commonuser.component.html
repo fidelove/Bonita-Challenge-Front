@@ -8,7 +8,7 @@
 		<div [hidden]="!buttonHidden">
 			<mat-form-field appearance="fill" class="admin-users-recipes-table">
 				<mat-label>Search by keywords</mat-label>
-				<input matInput placeholder="keywords" [(ngModel)]="searchCriteria" (keyup.enter)="onSearch($event)">
+				<input matInput placeholder="keywords" [(ngModel)]="searchElements" (keyup.enter)="onSearch($event)">
 				<mat-icon matSuffix>search</mat-icon>
 				<mat-hint>Press Enter to search</mat-hint>
 			</mat-form-field>

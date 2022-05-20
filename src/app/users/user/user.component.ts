@@ -4,6 +4,7 @@ import { Recipe, RoleType } from 'src/app/model/model';
 import { CommonService } from 'src/app/services/common.service';
 import { DialogService } from 'src/app/services/dialog.service';
 import { environment } from 'src/environments/environment';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-user',
@@ -12,40 +13,12 @@ import { environment } from 'src/environments/environment';
 })
 export class UserComponent extends CommonUserComponent<Recipe> implements OnInit {
 
-  constructor(public override service: CommonService, protected override dialog: DialogService) {
-    super(service, dialog);
+  constructor(public override service: CommonService, protected dialog: DialogService, private user: UserService) {
+    super(service, user);
     this.buttonHidden = true;
   }
 
   ngOnInit(): void {
-    this.updateItems();
-  }
-
-  // Methods to be implemented from parent class
-  override getAllItemsUrl(): string {
-    return environment.recipesByKeyUrl;
-  }
-
-  override getResourceUrl(): string {
-    return environment.userUrl;
-  }
-
-  getCommentUrl(): string {
-    return environment.commentUrl;
-  }
-
-  /*
-	override getDeleteContent(item: User): string {
-		return 'Are you sure you want to delete the user ' + item.name;
-	}
-*/
-  override createNewElement() { }
-
-  override processResponse(response: Recipe[]) {
-    response.forEach(recipe => {
-      recipe.displayName = recipe.name;
-      recipe.behindName = recipe.author.name;
-      recipe.contextType = RoleType.USER;
-    });
+    this.user.updateItems();
   }
 }

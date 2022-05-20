@@ -2,13 +2,12 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, Validators } from '@angular/forms';
 import { CommonService } from '../../services/common.service';
-import { AdminComponent } from '../../users/admin/admin.component';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { AbstractItem, Ingredient, Keyword, Recipe, User, Comment, RoleType } from 'src/app/model/model';
-import { ChefComponent } from '../../users/chef/chef.component';
-import { CommonUserComponent } from '../../users/commonuser/commonuser.component';
-import { UserComponent } from '../../users/user/user.component';
+import {  Ingredient, Keyword, Recipe} from 'src/app/model/model';
+import { ChefService } from 'src/app/services/chef.service';
+import { AdminService } from 'src/app/services/admin.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-data-editor',
@@ -22,7 +21,7 @@ export class DataEditorComponent implements OnInit {
   comment = '';
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private service: CommonService, private admin: AdminComponent, private chef: ChefComponent, private user: UserComponent) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private service: CommonService, private admin: AdminService, private chef: ChefService, private user: UserService) { }
 
   ngOnInit(): void { }
 
@@ -40,66 +39,19 @@ export class DataEditorComponent implements OnInit {
 
   // save or update action on a user information
   onSaveUser(item: any, action: string) {
-    this.onSave<User, AdminComponent>(item, action, this.admin.getResourceUrl(), this.admin);
+    this.admin.onSaveUser(item, action);
   }
 
   // save or update action on a recipe information
   onSaveRecipe(item: any, action: string) {
-    this.onSave<Recipe, ChefComponent>(item, action, this.chef.getResourceUrl(), this.chef);
+    this.chef.onSave(item, action, this.chef.getResourceUrl());
   }
 
-
-  onSave<T extends AbstractItem, U extends CommonUserComponent<T>>(item: any, action: string, url: string, userComponent: U) {
-    // If save, it is the creation of a new user
-    if ('Save' == action) {
-
-      this.service.post<T>(url, item).subscribe(
-        (response) => {
-          userComponent.addUser(response);
-        },
-        (error) => {
-          this.service.handleError(error);
-        }
-      );
-
-      // If update, it is the update of a new user
-    } else if ('Update' == action) {
-      this.service.put<T>(url + '/' + item.id, item).subscribe(
-        (response) => {
-          userComponent.updateUser(response);
-        },
-        (error) => {
-          this.service.handleError(error);
-        }
-      );
-    }
-  }
-
+  // Create a new comment
   onCreateComment(data: Recipe): void {
+    this.user.onCreateComment(data, this.comment);
 
-    if (RoleType.USER == data.contextType) {
-      const newComment: Comment = {
-        comment: this.comment,
-        id: 0,
-        name: this.comment,
-        contextType: RoleType.USER
-      };
-
-      var url = this.user.getCommentUrl().replace('{0}', data.id.toString());
-
-      this.service.post<Comment>(url, newComment).subscribe(
-        (response) => {
-          response.contextType = RoleType.USER;
-          response.displayName = newComment.comment;
-          this.user.createComment<Comment>(response);
-        },
-        (error => {
-          this.service.handleError(error);
-        })
-      );
-    }
   }
-
 
   // Add new ingredient
   addIngredient(event: MatChipInputEvent): void {

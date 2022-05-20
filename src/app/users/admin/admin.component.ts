@@ -4,6 +4,7 @@ import { User, RoleType } from '../../model/model';
 import { DialogService } from '../../services/dialog.service';
 import { environment } from '../../../environments/environment';
 import { CommonUserComponent } from '../commonuser/commonuser.component';
+import { AdminService } from 'src/app/services/admin.service';
 
 @Component({
 	selector: 'app-admin',
@@ -13,55 +14,14 @@ import { CommonUserComponent } from '../commonuser/commonuser.component';
 
 export class AdminComponent extends CommonUserComponent<User> implements OnInit {
 
-	constructor(public override service: CommonService, protected override dialog: DialogService) {
-		super(service, dialog);
+	constructor(public override service: CommonService, protected dialog: DialogService, private admin: AdminService) {
+		super(service, admin);
 		this.newElementButton = 'Create new user';
 		this.buttonHidden = false;
 	}
 
 	ngOnInit(): void {
-		this.updateItems();
+		this.admin.updateItems();
 	}
 
-	// Methods to be implemented from parent class
-	override getAllItemsUrl(): string {
-		return environment.allUsersUrl;
-	}
-
-	override getResourceUrl(): string {
-		return environment.userUrl;
-	}
-
-	override getDeleteUrl(item: User): string {
-		return environment.userUrl + "/" + item.id;
-	}
-
-
-	override getDeleteTitle(item: User): string {
-		return 'Delete user ' + item.name;
-	}
-
-	override getDeleteContent(item: User): string {
-		return 'Are you sure you want to delete the user ' + item.name;
-	}
-
-	override createNewElement() {
-		const user: User = {
-			id: 0,
-			name: '',
-			userPassword: '',
-			userEmail: '',
-			role: RoleType.ADMIN,
-			contextType: RoleType.ADMIN
-		}
-		this.dialog.openItemCreateOrEdit<User>(true, user);
-	}
-
-	override processResponse(response: User[]) {
-		response.forEach(user => {
-			user.displayName = user.name;
-			user.behindName = user.userEmail;
-			user.contextType = RoleType.ADMIN;
-		});
-	}
 }
