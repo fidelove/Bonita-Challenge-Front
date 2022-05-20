@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { DataEditorComponent } from '../users/data-editor/data-editor.component'
-import { AbstractItem, User, RoleType } from '../model/model';
-import { stringToKeyValue } from '@angular/flex-layout/extended/style/style-transforms';
+import { ConfirmDialogComponent } from '../dialog/confirm-dialog/confirm-dialog.component';
+import { DataEditorComponent } from '../dialog/data-editor/data-editor.component'
+import { AbstractItem, RoleType } from '../model/model';
 
 @Injectable({
   providedIn: 'root'

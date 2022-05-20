@@ -1,7 +1,7 @@
 import { CommonService } from 'src/app/services/common.service';
 import { DialogService } from 'src/app/services/dialog.service';
 import { Component } from '@angular/core';
-import { AbstractItem, RoleType } from 'src/app/model/model';
+import { AbstractItem } from 'src/app/model/model';
 
 @Component({
   selector: 'app-commonuser',

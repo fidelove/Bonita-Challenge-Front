@@ -2,13 +2,13 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, Validators } from '@angular/forms';
 import { CommonService } from '../../services/common.service';
-import { AdminComponent } from '../admin/admin.component';
+import { AdminComponent } from '../../users/admin/admin.component';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { AbstractItem, Ingredient, Keyword, Recipe, User, Comment, RoleType } from 'src/app/model/model';
-import { ChefComponent } from '../chef/chef.component';
-import { CommonUserComponent } from '../commonuser/commonuser.component';
-import { UserComponent } from '../user/user.component';
+import { ChefComponent } from '../../users/chef/chef.component';
+import { CommonUserComponent } from '../../users/commonuser/commonuser.component';
+import { UserComponent } from '../../users/user/user.component';
 
 @Component({
   selector: 'app-data-editor',
