@@ -85,9 +85,10 @@
 
 	<!--Comment-->
 	<div [hidden]="!data.isUserForm">
-		<mat-form-field appearance="fill">
+		<mat-form-field class="comment-text-area" [style.fontSize]="12" appearance="fill">
 			<mat-label>Comment</mat-label>
-			<input matInput [(ngModel)]="comment">
+			<textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+				cdkAutosizeMaxRows="5" [(ngModel)]="comment"></textarea>
 		</mat-form-field>
 	</div>
 </div>
