@@ -2,13 +2,13 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, Validators } from '@angular/forms';
 import { CommonService } from '../../services/common.service';
-import { environment } from '../../../environments/environment'
 import { AdminComponent } from '../admin/admin.component';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { AbstractItem, Ingredient, Keyword, Recipe, User } from 'src/app/model/model';
+import { AbstractItem, Ingredient, Keyword, Recipe, User, Comment, RoleType } from 'src/app/model/model';
 import { ChefComponent } from '../chef/chef.component';
 import { CommonUserComponent } from '../commonuser/commonuser.component';
+import { UserComponent } from '../user/user.component';
 
 @Component({
   selector: 'app-data-editor',
@@ -19,9 +19,10 @@ export class DataEditorComponent implements OnInit {
 
   hidePassword = true;
   addOnBlur = true;
+  comment = '';
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private service: CommonService, private admin: AdminComponent, private chef: ChefComponent) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private service: CommonService, private admin: AdminComponent, private chef: ChefComponent, private user: UserComponent) { }
 
   ngOnInit(): void { }
 
@@ -38,12 +39,12 @@ export class DataEditorComponent implements OnInit {
   }
 
   // save or update action on a user information
-  onSaveUser(item: any, action: string) { 
+  onSaveUser(item: any, action: string) {
     this.onSave<User, AdminComponent>(item, action, this.admin.getResourceUrl(), this.admin);
   }
 
   // save or update action on a recipe information
-  onSaveRecipe(item: any, action: string) { 
+  onSaveRecipe(item: any, action: string) {
     this.onSave<Recipe, ChefComponent>(item, action, this.chef.getResourceUrl(), this.chef);
   }
 
@@ -52,9 +53,9 @@ export class DataEditorComponent implements OnInit {
     // If save, it is the creation of a new user
     if ('Save' == action) {
 
-      this.service.post(url, item).subscribe(
-        () => {
-          userComponent.updateItems();
+      this.service.post<T>(url, item).subscribe(
+        (response) => {
+          userComponent.addUser(response);
         },
         (error) => {
           this.service.handleError(error);
@@ -63,9 +64,9 @@ export class DataEditorComponent implements OnInit {
 
       // If update, it is the update of a new user
     } else if ('Update' == action) {
-      this.service.put(url + '/' + item.id, item).subscribe(
-        () => {
-          userComponent.updateItems();
+      this.service.put<T>(url + '/' + item.id, item).subscribe(
+        (response) => {
+          userComponent.updateUser(response);
         },
         (error) => {
           this.service.handleError(error);
@@ -73,6 +74,32 @@ export class DataEditorComponent implements OnInit {
       );
     }
   }
+
+  onCreateComment(data: Recipe): void {
+
+    if (RoleType.USER == data.contextType) {
+      const newComment: Comment = {
+        comment: this.comment,
+        id: 0,
+        name: this.comment,
+        contextType: RoleType.USER
+      };
+
+      var url = this.user.getCommentUrl().replace('{0}', data.id.toString());
+
+      this.service.post<Comment>(url, newComment).subscribe(
+        (response) => {
+          response.contextType = RoleType.USER;
+          response.displayName = newComment.comment;
+          this.user.createComment<Comment>(response);
+        },
+        (error => {
+          this.service.handleError(error);
+        })
+      );
+    }
+  }
+
 
   // Add new ingredient
   addIngredient(event: MatChipInputEvent): void {

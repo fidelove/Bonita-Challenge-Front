@@ -13,9 +13,10 @@ import { CommonUserComponent } from '../commonuser/commonuser.component';
 
 export class AdminComponent extends CommonUserComponent<User> implements OnInit {
 
-	constructor(protected override service: CommonService, protected override dialog: DialogService) {
+	constructor(public override service: CommonService, protected override dialog: DialogService) {
 		super(service, dialog);
 		this.newElementButton = 'Create new user';
+		this.buttonHidden = false;
 	}
 
 	ngOnInit(): void {
@@ -50,8 +51,17 @@ export class AdminComponent extends CommonUserComponent<User> implements OnInit 
 			name: '',
 			userPassword: '',
 			userEmail: '',
-			role: RoleType.ADMIN
+			role: RoleType.ADMIN,
+			contextType: RoleType.ADMIN
 		}
 		this.dialog.openItemCreateOrEdit<User>(true, user);
+	}
+
+	override processResponse(response: User[]) {
+		response.forEach(user => {
+			user.displayName = user.name;
+			user.behindName = user.userEmail;
+			user.contextType = RoleType.ADMIN;
+		});
 	}
 }

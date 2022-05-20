@@ -9,7 +9,10 @@ export interface LoggedUser {
 
 export interface AbstractItem {
 	id: number,
-	name: string
+	name: string,
+	behindName?: string,
+	displayName?: string,
+	contextType: RoleType
 }
 
 export interface User extends AbstractItem {
@@ -34,10 +37,9 @@ export interface Keyword {
 	keyword: string
 }
 
-export interface Comment {
-	id: number,
-	comment: string,
-	created: string
+export interface Comment extends AbstractItem {
+	created?: string,
+	comment: string
 }
 
 export interface Recipe extends AbstractItem {

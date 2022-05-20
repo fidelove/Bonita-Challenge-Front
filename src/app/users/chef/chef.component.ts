@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Recipe } from 'src/app/model/model';
+import { Recipe, RoleType } from 'src/app/model/model';
 import { CommonUserComponent } from '../commonuser/commonuser.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -12,9 +12,10 @@ import { environment } from '../../../environments/environment';
 })
 export class ChefComponent extends CommonUserComponent<Recipe> implements OnInit {
 
-	constructor(protected override service: CommonService, protected override dialog: DialogService) {
+	constructor(public override service: CommonService, protected override dialog: DialogService) {
 		super(service, dialog);
 		this.newElementButton = 'Create new recipe';
+		this.buttonHidden = false;
 	}
 
 	ngOnInit(): void {
@@ -49,9 +50,16 @@ export class ChefComponent extends CommonUserComponent<Recipe> implements OnInit
 			ingredients: [],
 			keywords: [],
 			author: null,
-			comments: []
+			comments: [],
+			contextType: RoleType.CHEF
 		}
 		this.dialog.openItemCreateOrEdit<Recipe>(true, recipe);
+	}
 
+	override processResponse(response: Recipe[]) {
+		response.forEach(recipe => {
+			recipe.displayName = recipe.name;
+			recipe.contextType = RoleType.CHEF;
+		});
 	}
 }

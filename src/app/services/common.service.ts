@@ -13,6 +13,7 @@ import { DialogService } from './dialog.service'
 export class CommonService {
 
   authenticated = false;
+  items: any[];
 
   constructor(private http: HttpClient, private cookies: CookieService, private router: Router, private dialog: DialogService) { }
 

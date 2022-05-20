@@ -37,10 +37,16 @@ import { CommonUserComponent } from './users/commonuser/commonuser.component';
     FlexLayoutModule,
     ReactiveFormsModule
   ],
-  providers: [CookieService, ConfirmDialogComponent, DataEditorComponent, AdminComponent, ChefComponent, CommonUserComponent],
+  providers: [CookieService,
+    ConfirmDialogComponent,
+    DataEditorComponent,
+    AdminComponent,
+    ChefComponent,
+    UserComponent,
+    CommonUserComponent],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   entryComponents: [ConfirmDialogComponent, DataEditorComponent]
 })
 
-export class AppModule {}
+export class AppModule { }

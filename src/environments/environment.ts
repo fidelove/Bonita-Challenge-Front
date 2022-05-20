@@ -10,6 +10,7 @@ export const environment = {
   userUrl: 'user',
   recipesByKeyUrl: 'recipes',
   recipeUrl: 'recipe',
+  commentUrl: 'recipe/{0}/comment',
   production: false
 };
 

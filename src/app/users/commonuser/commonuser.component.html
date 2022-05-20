@@ -1,17 +1,33 @@
 <div class="main-wrapper" fxLayout="row" fxLayoutAlign="center center">
 	<mat-nav-list>
-		<button mat-stroked-button color="primary" (click)="createNewElement()">{{newElementButton}}</button>
-		<a mat-list-item class="admin-users-recipes-table" *ngFor="let item of items;"
-			(click)="navigate(item)" [disableRipple]="true">
+		<!-- Admin and chef views, create button-->
+		<div [hidden]="buttonHidden">
+			<button mat-stroked-button color="primary" (click)="createNewElement()">{{newElementButton}}</button>
+		</div>
+		<!-- User view, search field-->
+		<div [hidden]="!buttonHidden">
+			<mat-form-field appearance="fill" class="admin-users-recipes-table">
+				<mat-label>Search by keywords</mat-label>
+				<input matInput placeholder="keywords" [(ngModel)]="searchCriteria" (keyup.enter)="onSearch($event)">
+				<mat-icon matSuffix>search</mat-icon>
+				<mat-hint>Press Enter to search</mat-hint>
+			</mat-form-field>
+		</div>
+		<!-- all views, items list-->
+		<a mat-list-item class="admin-users-recipes-table" *ngFor="let item of service.items" (click)="navigate(item)"
+			[disableRipple]="true">
 			<mat-icon matListAvatar>person</mat-icon>
-			<h3 matLine> {{item.name}}</h3>
-			<p matLine>{{item.userEmail}}</p>
-			<button mat-icon-button (click)="onEdit($event, item)">
-				<mat-icon>edit</mat-icon>
-			</button>
-			<button mat-icon-button (click)="onDelete($event, item)">
-				<mat-icon>delete_outline</mat-icon>
-			</button>
+			<h3 matLine> {{item.displayName}}</h3>
+			<p matLine>{{item.behindName}}</p>
+			<!--Admin and chef views, edit and delete button-->
+			<div [hidden]="buttonHidden">
+				<button mat-icon-button (click)="onEdit($event, item)">
+					<mat-icon>edit</mat-icon>
+				</button>
+				<button mat-icon-button (click)="onDelete($event, item)">
+					<mat-icon>delete_outline</mat-icon>
+				</button>
+			</div>
 		</a>
 	</mat-nav-list>
 </div>
